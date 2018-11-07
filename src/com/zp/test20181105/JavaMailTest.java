@@ -68,25 +68,24 @@ public class JavaMailTest {
 
 	public static void sendEmail(String content) {
 		try {
-			// ´´½¨ÓÊ¼şÅäÖÃ
+			// åˆ›å»ºé‚®ä»¶é…ç½®
 			Properties props = new Properties();
-			props.setProperty("mail.transport.protocol", "smtp"); // Ê¹ÓÃµÄĞ­Òé£¨JavaMail¹æ·¶ÒªÇó£©
-			props.setProperty("mail.smtp.host", SMTPSERVER); // ·¢¼şÈËµÄÓÊÏäµÄ
-																// SMTP·şÎñÆ÷µØÖ·
-			props.setProperty("mail.smtp.port", SMTPPORT); // ¶Ë¿Ú
+			props.setProperty("mail.transport.protocol", "smtp"); // ä½¿ç”¨çš„åè®®ï¼ˆJavaMailè§„èŒƒè¦æ±‚ï¼‰
+			props.setProperty("mail.smtp.host", SMTPSERVER); // å‘ä»¶äººçš„é‚®ç®±çš„SMTPæœåŠ¡å™¨åœ°å€
+			props.setProperty("mail.smtp.port", SMTPPORT); // ç«¯å£
 			props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-			props.setProperty("mail.smtp.auth", "true"); // ĞèÒªÇëÇóÈÏÖ¤
-			props.setProperty("mail.smtp.ssl.enable", "true");// ¿ªÆôssl
-			// ¸ù¾İÓÊ¼şÅäÖÃ´´½¨»á»°£¬×¢Òâsession±ğµ¼´í°ü
+			props.setProperty("mail.smtp.auth", "true"); // éœ€è¦è¯·æ±‚è®¤è¯
+			props.setProperty("mail.smtp.ssl.enable", "true");// å¼€å¯ssl
+			// æ ¹æ®é‚®ä»¶é…ç½®åˆ›å»ºä¼šè¯ï¼Œæ³¨æ„sessionåˆ«å¯¼é”™åŒ…
 			Session session = Session.getDefaultInstance(props);
-			// ¿ªÆôdebugÄ£Ê½£¬¿ÉÒÔ¿´µ½¸ü¶àÏêÏ¸µÄÊäÈëÈÕÖ¾
+			// å¼€å¯debugæ¨¡å¼ï¼Œå¯ä»¥çœ‹åˆ°æ›´å¤šè¯¦ç»†çš„è¾“å…¥æ—¥å¿—
 			session.setDebug(true);
-			// »ñÈ¡´«ÊäÍ¨µÀ
+			// è·å–ä¼ è¾“é€šé“
 			Transport transport = session.getTransport();
 			transport.connect(ACCOUT, PWD);
-			// ´´½¨ÓÊ¼ş
-			MimeMessage message = createEmail(session, USERS, content); // ½«ÓÃ»§ºÍÄÚÈİ´«µİ¹ıÀ´
-			// Á¬½Ó£¬²¢·¢ËÍÓÊ¼ş
+			// åˆ›å»ºé‚®ä»¶
+			MimeMessage message = createEmail(session, USERS, content); // å°†ç”¨æˆ·å’Œå†…å®¹ä¼ é€’è¿‡æ¥
+			// è¿æ¥ï¼Œå¹¶å‘é€é‚®ä»¶
 			transport.sendMessage(message, message.getAllRecipients());
 
 			transport.close();
@@ -96,26 +95,26 @@ public class JavaMailTest {
 	}
 
 	public static MimeMessage createEmail(Session session, String users, String content) throws Exception {
-		// ¸ù¾İ»á»°´´½¨ÓÊ¼ş
+		// æ ¹æ®ä¼šè¯åˆ›å»ºé‚®ä»¶
 		MimeMessage msg = new MimeMessage(session);
-		// addressÓÊ¼şµØÖ·, personalÓÊ¼şêÇ³Æ, charset±àÂë·½Ê½
-		InternetAddress fromAddress = new InternetAddress(ACCOUT, "²âÊÔÍÆËÍ");
-		// ÉèÖÃ·¢ËÍÓÊ¼ş·½
+		// addressé‚®ä»¶åœ°å€, personalé‚®ä»¶æ˜µç§°, charsetç¼–ç æ–¹å¼
+		InternetAddress fromAddress = new InternetAddress(ACCOUT, "æµ‹è¯•æ¨é€");
+		// è®¾ç½®å‘é€é‚®ä»¶æ–¹
 		msg.setFrom(fromAddress);
-		// µ¥¸ö¿ÉÒÔÖ±½ÓÕâÑù´´½¨
+		// å•ä¸ªå¯ä»¥ç›´æ¥è¿™æ ·åˆ›å»º
 		// InternetAddress receiveAddress = new InternetAddress();
-		// ÉèÖÃÓÊ¼ş½ÓÊÕ·½
+		// è®¾ç½®é‚®ä»¶æ¥æ”¶æ–¹
 		Address[] internetAddressTo = new InternetAddress().parse(users);
 		// type:
-		// Òª±»ÉèÖÃÎª TO, CC »òÕß BCC£¬ÕâÀï CC ´ú±í³­ËÍ¡¢BCC ´ú±íÃØÃÜ³­ËÍ¡£¾ÙÀı£ºMessage.RecipientType.TO
+		// è¦è¢«è®¾ç½®ä¸º TO, CC æˆ–è€… BCCï¼Œè¿™é‡Œ CC ä»£è¡¨æŠ„é€ã€BCC ä»£è¡¨ç§˜å¯†æŠ„é€ã€‚ä¸¾ä¾‹ï¼šMessage.RecipientType.TO
 
 		msg.setRecipients(MimeMessage.RecipientType.TO, internetAddressTo);
-		// ÉèÖÃÓÊ¼ş±êÌâ
+		// è®¾ç½®é‚®ä»¶æ ‡é¢˜
 		msg.setSubject(SUBJECT);
 		msg.setText(content);
-		// ÉèÖÃÏÔÊ¾µÄ·¢¼şÊ±¼ä
+		// è®¾ç½®æ˜¾ç¤ºçš„å‘ä»¶æ—¶é—´
 		msg.setSentDate(new Date());
-		// ±£´æÉèÖÃ
+		// ä¿å­˜è®¾ç½®
 		msg.saveChanges();
 		return msg;
 	}
